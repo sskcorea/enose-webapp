@@ -1,7 +1,9 @@
 $(document).ready(function () {
   var timeData = [],
     temperatureData = [],
-    humidityData = [];
+    humidityData = [],
+    acetoneData = [],
+    toluenData = [];
   var data = {
     labels: timeData,
     datasets: [
@@ -26,6 +28,33 @@ $(document).ready(function () {
         pointHoverBackgroundColor: "rgba(24, 120, 240, 1)",
         pointHoverBorderColor: "rgba(24, 120, 240, 1)",
         data: humidityData
+      }
+    ]
+  }
+  var data2 = {
+    labels: timeData,
+    datasets: [
+      {
+        fill: false,
+        label: 'Acetone',
+        yAxisID: 'Acetone',
+        borderColor: "rgba(255, 204, 0, 1)",
+        pointBoarderColor: "rgba(255, 204, 0, 1)",
+        backgroundColor: "rgba(255, 204, 0, 0.4)",
+        pointHoverBackgroundColor: "rgba(255, 204, 0, 1)",
+        pointHoverBorderColor: "rgba(255, 204, 0, 1)",
+        data: acetoneData
+      },
+      {
+        fill: false,
+        label: 'Toluene',
+        yAxisID: 'Toluene',
+        borderColor: "rgba(24, 120, 240, 1)",
+        pointBoarderColor: "rgba(24, 120, 240, 1)",
+        backgroundColor: "rgba(24, 120, 240, 0.4)",
+        pointHoverBackgroundColor: "rgba(24, 120, 240, 1)",
+        pointHoverBorderColor: "rgba(24, 120, 240, 1)",
+        data: tolueneData
       }
     ]
   }
@@ -57,6 +86,32 @@ $(document).ready(function () {
     }
   }
 
+  var basicOption2 = {
+    title: {
+      display: true,
+      text: 'Acetone & Toluene Real-time Data',
+      fontSize: 36
+    },
+    scales: {
+      yAxes: [{
+        id: 'Acetone',
+        type: 'linear',
+        scaleLabel: {
+          labelString: 'Acetone(ppm)',
+          display: true
+        },
+        position: 'left',
+      }, {
+          id: 'Toluene',
+          type: 'linear',
+          scaleLabel: {
+            labelString: 'Toluene(ppm)',
+            display: true
+          },
+          position: 'right'
+        }]
+    }
+  }
   //Get the context of the canvas element we want to select
   var ctx = document.getElementById("myChart").getContext("2d");
   var optionsNoAnimation = { animation: false }
@@ -64,6 +119,11 @@ $(document).ready(function () {
     type: 'line',
     data: data,
     options: basicOption
+  });
+  var myLineChart2 = new Chart(ctx, {
+    type: 'line',
+    data: data2,
+    options: basicOption2
   });
 
   var ws = new WebSocket('wss://' + location.host);
@@ -94,7 +154,18 @@ $(document).ready(function () {
         humidityData.shift();
       }
 
+      if (obj.acetone)
+        acetoneData.push(obj.acetone);
+      if (acetoneData.length > maxLen)
+        acetoneData.shift();
+
+      if (obj.toluen)
+        toluenData.push(obj.toluen);
+      if (toluenData.length > maxLen)
+        toluenData.shift();
+
       myLineChart.update();
+      myLineChart2.update();
     } catch (err) {
       console.error(err);
     }
