@@ -3,7 +3,7 @@ $(document).ready(function () {
     temperatureData = [],
     humidityData = [],
     acetoneData = [],
-    toluenData = [];
+    tolueneData = [];
   var data = {
     labels: timeData,
     datasets: [
@@ -160,9 +160,9 @@ $(document).ready(function () {
         acetoneData.shift();
 
       if (obj.toluen)
-        toluenData.push(obj.toluen);
-      if (toluenData.length > maxLen)
-        toluenData.shift();
+      tolueneData.push(obj.toluen);
+      if (tolueneData.length > maxLen)
+      tolueneData.shift();
 
       myLineChart.update();
       myLineChart2.update();
