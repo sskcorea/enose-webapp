@@ -160,10 +160,10 @@ $(document).ready(function () {
       if (acetoneData.length > maxLen)
         acetoneData.shift();
 
-      if (obj.toluen)
-      tolueneData.push(obj.toluen);
+      if (obj.toluene)
+        tolueneData.push(obj.toluene);
       if (tolueneData.length > maxLen)
-      tolueneData.shift();
+        tolueneData.shift();
 
       myLineChart.update();
       myLineChart2.update();
